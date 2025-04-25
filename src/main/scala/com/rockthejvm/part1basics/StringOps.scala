@@ -2,40 +2,44 @@ package com.rockthejvm.part1basics
 
 object StringOps {
 
-  val aString: String = "Hello, I am learning Scala"
+  val aString : String = "Hello, how are you?"
 
-  // string functions
+  //string functions(methods)
   val secondChar = aString.charAt(1)
-  val firstWord = aString.substring(0, 5) // "Hello"
-  val words = aString.split(" ") // Array("Hello,", "I", "am", "learning", "Scala")
+  val firstWord = aString.substring(0, 5) // Hello
+  val words = aString.split(" ") // array["Hello,", "how", ..]
   val startsWithHello = aString.startsWith("Hello") // true
   val allDashes = aString.replace(' ', '-')
-  val allUppercase = aString.toUpperCase() // also toLowerCase()
-  val nChars = aString.length
+  val allUppercase = aString.toUpperCase()// also to lowercase
+  val n = aString.length
 
-  // other functions
+  //other functions
   val reversed = aString.reverse
-  val aBunchOfChars = aString.take(10)
-
+  val aBunchOfChars = aString.take(10) // take first 10 chars of the string
   // parse to numeric
   val numberAsString = "2"
   val number = numberAsString.toInt
 
   // s-interpolation
-  val name = "Alice"
-  val age = 12
-  val greeting = "Hello, I'm " + name + " and I am " + age + "years old."
-  val greeting_v2 = s"Hello, I'm $name and I'm $age years old."
-  val greeting_v3 = s"Hello, I'm $name and I will be turning ${age + 1} years old."
+  val name = "Ujwal"
+  val age = 25
+  val greeting = "Hello, I am " + name + " and I am " + age + " years old. "
+  val greetings_v2 = s" Hello I am $name and I am $age years old"
+  println(greetings_v2)
+  val greetings_v3 = s" Hello I am $name and I am ${age + 1} years old" // inject the expression and evaluate it.
 
-  // f-interpolation
-  val speed = 1.2f
-  val myth = f"$name can eat $speed%2.5f burgers per minute."
+  // f-interpolation   // can control the format of interpolators
+  val speed = 1.2122f
+  val myth = f"$name can eat $speed%2.2f burgers per minute. "
+  println(myth)
 
   // raw-interpolation
-  val escapes = raw"This is a \n newline"
+  val escapes = "This is a \n newline"
+  println(escapes)
+  val escapes_v2 = raw"This is a \n newline"
+  println(escapes_v2)
 
   def main(args: Array[String]): Unit = {
-    println(escapes)
+
   }
 }

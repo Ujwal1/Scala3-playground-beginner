@@ -1,110 +1,98 @@
 package com.rockthejvm.part2oop
 
+import scala.language.postfixOps
+
 object OOBasics {
 
-  // classes
-  class Person(val name: String, age: Int) { // constructor signature
-    // fields
+  // this class has constructor arguments
+  class Person(name: String, age: Int)
+
+  val aPerson: Person = new Person("John", 26)
+//  val john = aPerson.name // wong. scala makes distinction bw constructor args and potential fields of the class
+
+  class Person_v2(val  name: String = "Jane Doe", age: Int = 0) {
+    //fields
     val allCaps = name.toUpperCase()
 
     // methods
-    def greet(name: String): String =
-      s"${this.name} says: Hi, $name"
+    def greet(name: String) : Unit = {
+      println(s"${this.name} says : Hi, $name") // use this to disambiguate 'name'
+    }
 
     // signature differs
     // OVERLOADING
-    def greet(): String =
-      s"Hi, everyone, my name is $name"
+    def greet() : String =
+      s"Hi everyone, my n mae is $name"
 
-    // aux constructor
-    def this(name: String) =
-      this(name, 0)
+    // auxiliary constructor
+//    def this (name: String) =
+//      this(name, 0)
+//
+//    def this() =
+//      this("Jane Doe")
+  }
+  val bPerson : Person_v2 = new Person_v2("Mike", 34)
+  val bigMike = bPerson.allCaps
+  println(bigMike)
 
-    def this() =
-      this("Jane Doe")
+  bPerson.greet("Ujwal")
+  println( bPerson.greet() )
+
+  // exercises
+  class Writer(val fName: String, val lName: String, val yBirth: Int) {
+    def fullName() : String =
+      s"$fName $lName"
   }
 
-  val aPerson: Person = new Person("John", 26)
-  val john = aPerson.name // class parameter != field
-  val johnSayHiToDaniel = aPerson.greet("Daniel")
-  val johnSaysHi = aPerson.greet()
-  val genericPerson = new Person()
+  class Novel(val name: String, val yor: Int, val author: Writer ) {
+    def authorAge(): Int =
+      this.yor - author.yBirth
+
+    def isWrittenBy(name: String) : Boolean =
+      name == this.name
+
+    def copy(newYor: Int) : Novel =
+      new Novel(name, newYor, author)
+  }
+
+  // exercise 2: immutable counter class
+  // constructed with initial count
+  // - increment / decrement: => NEW instance of counter
+  // val can't be modified: its constant
+  // - increment(n)/ decrement(n) => NEW instance of COUNTER
+  //
+
+  class Counter(val count: Int)  {
+    def increment() : Counter = {
+      new Counter(count+1)
+    }
+
+    def decrement() : Counter = {
+      new Counter(count-1)
+    }
+
+    def increment(n: Int) : Counter = {
+      new Counter(count + n)
+    }
+
+    def decrement(n: Int): Counter = {
+      new Counter(count - n)
+    }
+
+    def print() = {
+      println(s"$count")
+    }
+  }
+
 
   def main(args: Array[String]): Unit = {
-    val charlesDickens = new Writer("Charles", "Dickens", 1812)
-    val charlesDickensImpostor = new Writer("Charles", "Dickens", 2021)
-
-    val novel = new Novel("Great Expectations", 1861, charlesDickens)
-    val newEdition = novel.copy(1871)
-
-    println(charlesDickens.fullName)
-    println(novel.authorAge)
-    println(novel.isWrittenBy(charlesDickensImpostor)) // false
-    println(novel.isWrittenBy(charlesDickens)) // true
-    println(newEdition.authorAge)
-
-    val counter = new Counter()
-    counter.print() // 0
-    counter.increment().print() // 1
-    counter.increment() // always returns new instances
-    counter.print() // 0
-
-    counter.increment(10).print() // 10
-    counter.increment(20000).print() // 20000
+    val aCount = new Counter(10)
+    aCount.print()
+    val bCount = aCount.increment()
+    bCount.print()
+    val cCount = bCount.decrement(4)
+    cCount.print()
+    cCount.increment().print()
+    cCount.print() // immutable data structures : miracles in distributed environments
   }
-}
-
-/**
-  Exercise: imagine we're creating a backend for a book publishing house.
-  Create a Novel and a Writer class.
-
-  Writer: first name, surname, year
-    - method fullname
-
-  Novel: name, year of release, author
-    - authorAge
-    - isWrittenBy(author)
-    - copy (new year of release) = new instance of Novel
- */
-
-class Writer(firstName: String, lastName: String, val yearOfBirth: Int) {
-  def fullName: String = s"$firstName $lastName"
-}
-
-class Novel(title: String, yearOfRelease: Int, val author: Writer) {
-  def authorAge: Int = yearOfRelease - author.yearOfBirth
-  def isWrittenBy(author: Writer): Boolean = this.author == author
-  def copy(newYear: Int): Novel = new Novel(title, newYear, author)
-}
-
-/**
- * Exercise #2: an immutable counter class
- * - constructed with an initial count
- * - increment/decrement => NEW instance of counter
- * - increment(n)/decrement(n) => NEW instance of counter
- * - print()
- *
- * Benefits:
- * + well in distributed environments
- * + easier to read and understand code
- */
-
-class Counter(count: Int = 0) {
-  def increment(): Counter =
-    new Counter(count + 1)
-
-  def decrement(): Counter =
-    if (count == 0) this
-    else new Counter(count - 1)
-
-  def increment(n: Int): Counter =
-    if (n <= 0) this
-    else increment().increment(n - 1) // vulnerable to SOs
-
-  def decrement(n: Int): Counter =
-    if (n <= 0) this
-    else decrement().decrement(n - 1)
-
-  def print(): Unit =
-    println(s"Current count: $count")
 }

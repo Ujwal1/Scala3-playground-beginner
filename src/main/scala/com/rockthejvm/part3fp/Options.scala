@@ -4,60 +4,55 @@ import scala.util.Random
 
 object Options {
 
-  // options = "collections" with at most one value
-  val anOption: Option[Int] = Option(42)
+  // options: mini collections with at most one value
+  val anOption: Option[Int] = Option(32)
   val anEmptyOption: Option[Int] = Option.empty
 
-  // alt version
-  val aPresentValue: Option[Int] = Some(4)
-  val anEmptyOption_v2: Option[Int] = None
+  //alt version
+  val aPresentValue : Option[Int] = Some(4)
+  val anEmptyOption_v2 : Option[Int] = None
 
-  // "standard" API
   val isEmpty = anOption.isEmpty
   val innerValue = anOption.getOrElse(90)
-  val anotherOption = Option(46)
+  val anotherOption: Option[Int] = Option(46)
   val aChainedOption = anEmptyOption.orElse(anotherOption)
 
-  // map, flatMap, filter, for
-  val anIncrementedOption = anOption.map(_ + 1) // Some(43)
-  val aFilteredOption = anIncrementedOption.filter(_ % 2 == 0) // None
-  val aFlatMappedOption = anOption.flatMap(value => Option(value * 10)) // Some(420)
+  // map, flatmap, filter, for
+  val anIncrementedOption = anOption.map(_+1) // SOme(43)
+  val aFilteredOption = anIncrementedOption.filter(_%2 == 0) // None
+  val aFlatMapOption = anOption.flatMap(value => Option(value * 10)) // Some(420)
 
-  // WHY options: work with unsafe API
-  def unsafeMethod(): String = null
+
+
+
+  // WHY options? to work with unsafe API returning NULL
+  def unsafeMehtod(): String = null
   def fallbackMethod(): String = "some valid result"
 
-  // defensive style
-  val stringLength = {
-    val potentialString = unsafeMethod()
-    if (potentialString == null) -1
-    else potentialString.length
-  }
+  // defensive stype
+  val stringLength = if(unsafeMehtod() == null) -1 else unsafeMehtod()
 
-  // option-style: no need for null checks
-  val stringLengthOption = Option(unsafeMethod()).map(_.length)
+  // option style: no need for null checks
+  val stringLengthOption: Option[Int] = Option(unsafeMehtod()).map(_.length)
 
-  // use-case for orElse
-  val someResult = Option(unsafeMethod()).orElse(Option(fallbackMethod()))
+  // usecase for or-else
+  val someResult = Option(unsafeMehtod()).orElse(Option(fallbackMethod()))
 
   // DESIGN
   def betterUnsafeMethod(): Option[String] = None
-  def betterFallbackMethod(): Option[String] = Some("A valid result")
-  val betterChain = betterUnsafeMethod().orElse(betterFallbackMethod())
+  def betterFallback(): Option[String] = Some("A valid result")
 
   // example: Map.get
-  val phoneBook = Map(
-    "Daniel" -> 1234
+  val phonebook = Map(
+    "daniel" -> 1234
   )
-  val marysPhoneNumber = phoneBook.get("Mary") // None
-  // no need to crash, check for nulls or if Mary is present in the map
+  val marysPhoneNo = phonebook.get("Mary") // None
+  // no need to crash, check for nulls or if Mary is present in the Map
 
   /**
    * Exercise:
-   *  Get the host and port from the config map,
-   *    try to open a connection,
-   *    print "Conn successful"
-   *    or "Conn failed"
+   *
+   *
    */
 
   val config: Map[String, String] = Map(
@@ -67,17 +62,17 @@ object Options {
   )
 
   class Connection {
-    def connect(): String = "Connection successful"
+    def connect(): String = "Connection Successful"
   }
 
   object Connection {
     val random = new Random()
 
-    def apply(host: String, port: String): Option[Connection] =
+    def apply(host: String, port: String): Option[Connection] = {
       if (random.nextBoolean()) Some(new Connection)
       else None
+    }
   }
-
   // defensive style (in an imperative language e.g. Java)
   /*
     String host = config("host")
@@ -97,21 +92,28 @@ object Options {
   val connStatus = connection.map(_.connect())
 
   // compact
-  val connStatus_v2 =
+  val connStatus_v2: Option[String] =
     config.get("host").flatMap(h =>
       config.get("port").flatMap(p =>
         Connection(h, p).map(_.connect())
       )
     )
 
-  // for-comprehension
-  val connStatus_v3 = for {
+    // for-comprehension
+  val connStatus_v3: Option[String] = for {
     h <- config.get("host")
     p <- config.get("port")
     conn <- Connection(h, p)
   } yield conn.connect()
 
+
+
+
+
   def main(args: Array[String]): Unit = {
     println(connStatus.getOrElse("Failed to establish connection"))
+    println(connStatus_v2.getOrElse("Failed"))
+    println(connStatus_v3.getOrElse("Failed"))
   }
+
 }

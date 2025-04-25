@@ -21,7 +21,7 @@ object TuplesMaps {
 
   // core APIs
   val phonebookHasDaniel = phonebook.contains("Daniel")
-  val marysPhoneNumber = phonebook("Mary") // crash with an exception
+  val marysPhoneNumber = phonebook("Mary") // crash with an exception if theres no default value
 
   // add a pair
   val newPair = "Mary" -> 678
@@ -62,4 +62,5 @@ object TuplesMaps {
     println(marysPhoneNumber)
     println(nameGroupings)
   }
+
 }

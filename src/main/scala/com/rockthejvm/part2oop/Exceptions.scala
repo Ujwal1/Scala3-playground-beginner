@@ -6,14 +6,13 @@ object Exceptions {
   // aString.length crashes with a NPE
 
   // 1 - throw exceptions
-  // val aWeirdValue: Int = throw new NullPointerException // returns Nothing
+//   val aWeirdValue: Int = throw new NullPointerException // returns Nothing : NOTHING is a proper replacement for any type of exception
 
   // Exception hieararchy:
   //
   // Throwable:
   //    Error, e.g. SOError, OOMError
   //    Exception, e.g. NPException, NSEException, ....
-
   def getInt(withExceptions: Boolean): Int =
     if (withExceptions) throw new RuntimeException("No int for you!")
     else 42
@@ -41,33 +40,30 @@ object Exceptions {
 
   val myException = new MyException
 
-  /**
-   * Exercises:
-   *
-   * 1. Crash with SOError
-   * 2. Crash with OOMError
-   * 3. Find an element matching a predicate in LList
-   */
+  // SOError
+//  def callBack(): Unit = {
+//    val a: Int = 100
+//    callBack()
+//    val b: Int = 101
+//  }
+//  callBack()
 
-  def soCrash(): Unit = {
-    def infinite(): Int = 1 + infinite()
-    infinite()
-  }
+//  // creating a : OOM: Out of memory error
+//  def oomCrash(): Unit = {
+//    def bigString(n: Int, acc: String) : String = {
+//      if (n == 0) acc
+//      else bigString(n - 1, acc + acc)
+//    }
+//    bigString(5678765, "Scalaa")
+//  }
 
-  def oomCrash(): Unit = {
-    def bigString(n: Int, acc: String): String =
-      if (n == 0) acc
-      else bigString(n - 1, acc + acc)
+//  oomCrash()
 
-    bigString(56175363, "Scala")
-  }
+
+
 
 
   def main(args: Array[String]): Unit = {
-    println(potentialFail)
-    // val throwingMyException = throw myException
 
-    // soCrash()
-    oomCrash()
   }
 }

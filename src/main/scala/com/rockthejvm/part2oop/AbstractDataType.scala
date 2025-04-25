@@ -1,10 +1,11 @@
 package com.rockthejvm.part2oop
 
-object AbstractDataTypes {
-
+object AbstractDataType {
   abstract class Animal {
     val creatureType: String // abstract
+
     def eat(): Unit
+
     // non-abstract fields/methods allowed
     def preferredMeal: String = "anything" // "accessor methods"
   }
@@ -15,7 +16,9 @@ object AbstractDataTypes {
   // non-abstract classes must implement the abstract fields/methods
   class Dog extends Animal {
     override val creatureType = "domestic"
+
     override def eat(): Unit = println("crunching this bone")
+
     // overriding is legal for everything
     override val preferredMeal: String = "bones" // overriding accessor method with a field
   }
@@ -35,9 +38,12 @@ object AbstractDataTypes {
   // one class inheritance
   // multiple traits inheritance
   trait ColdBlooded
+
   class Crocodile extends Animal with Carnivore with ColdBlooded {
     override val creatureType = "croc"
+
     override def eat(): Unit = println("I'm a croc, I just crunch stuff")
+
     override def eat(animal: Animal): Unit = println("croc eating animal")
   }
 
@@ -60,7 +66,7 @@ object AbstractDataTypes {
    */
 
   val aNonExistentAnimal: Animal = null
-  val anInt: Int = throw new NullPointerException
+//  val anInt: Int = throw new NullPointerException
 
   def main(args: Array[String]): Unit = {
 

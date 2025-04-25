@@ -4,6 +4,7 @@ object Inheritance {
 
   class Animal {
     val creatureType = "wild"
+
     def eat(): Unit = println("nomnomnom")
   }
 
@@ -25,6 +26,7 @@ object Inheritance {
   // overriding
   class Dog extends Animal {
     override val creatureType = "domestic"
+
     override def eat(): Unit = println("mmm, I like this bone")
 
     // popular overridable method
@@ -38,6 +40,7 @@ object Inheritance {
   // overloading vs overriding
   class Crocodile extends Animal {
     override val creatureType = "very wild"
+
     override def eat(): Unit = println("I can eat anything, I'm a croc")
 
     // overloading: multiple methods with the same name, different signatures
@@ -45,9 +48,13 @@ object Inheritance {
     //    different argument list (different number of args + different arg types)
     //    + different return type (optional)
     def eat(animal: Animal): Unit = println("I'm eating this poor fella")
+
     def eat(dog: Dog): Unit = println("eating a dog")
+
     def eat(person: Person): Unit = println(s"I'm eating a human with the name ${person.name}")
+
     def eat(person: Person, dog: Dog): Unit = println("I'm eating a human AND the dog")
+
     // def eat(): Int = 45 // not a valid overload
     def eat(dog: Dog, person: Person): Unit = println("I'm eating a human AND the dog")
 

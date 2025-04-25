@@ -91,6 +91,14 @@ object Generics {
    * Exercise: genericize LList.
    */
 
+//  // generecize LList
+//  abstract class LList[A] {
+//    def head: A
+//    def tail: LList[A]
+//    def isEmpty: Boolean
+//    def add(element: A): LList[A]
+//  }
+
   def main(args: Array[String]): Unit = {
 
   }

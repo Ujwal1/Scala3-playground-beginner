@@ -1,86 +1,76 @@
 package com.rockthejvm.part1basics
 
 import scala.annotation.tailrec
+import scala.jdk.Accumulator
 
 object Recursion {
 
-  // "repetition" = recursion
-  def sumUntil(n: Int): Int =
-    if (n <= 0) 0
-    else n + sumUntil(n - 1) // "stack" recursion
-
-  def sumUntil_v2(n: Int): Int = {
-    /*
-      sut(10, 0) =
-      sut(9, 10) =
-      sut(8, 9 + 10) =
-      sut(7, 8 + 9 + 10) =
-      ...
-      sut(0, 1 + 2 + 3 + .. + 9 + 10)
-      = 1 + 2 + 3 + .. + 10
-     */
-    @tailrec
-    def sumUntilTailrec(x: Int, accumulator: Int): Int =
-      if (x <= 0) accumulator
-      else sumUntilTailrec(x - 1, accumulator + x) // TAIL recursion = recursive call occurs LAST in its code path
-      // no further stack frames necessary = no more risk of SO
-
-    sumUntilTailrec(n, 0)
+  // 'repetition' = recursion
+  def sumUntil(n:Int):Int = {
+    if(n <= 0) 0
+    else n + sumUntil(n-1)
   }
 
-  def sumNumbersBetween(a: Int, b: Int): Int =
-    if (a > b) 0
-    else a + sumNumbersBetween(a + 1, b)
+  def sumUntil_v2(n:Int): Int = {
 
-  def sumNumbersBetween_v2(a: Int, b: Int): Int = {
     @tailrec
-    def sumTailrec(currentNumber: Int, accumulator: Int): Int =
-      if (currentNumber > b) accumulator
-      else sumTailrec(currentNumber + 1, currentNumber + accumulator)
-
-    sumTailrec(a, 0)
+    def sumUntilTailRec(x : Int, accumulator: Int) : Int = {
+      if ( x <= 0) accumulator
+      else sumUntilTailRec(x-1, accumulator + x)
+      // no further stack frames necessary = no more risk of stack overflow
+    }
+    sumUntilTailRec(n, 0)
   }
 
-  /**
-   * Exercises
-   * 1. Concatenate a string n times
-   * 2. Fibonacci function, tail recursive
-   * 3. Is isPrime function tail recursive or not?
-   */
+  def sumNumbersBetween(a: Int, b: Int): Int = {
+    if(b == a) b
+    else b + sumNumbersBetween(a, b-1)
+  }
 
-  // 1
-  def concatenate(string: String, n: Int): String = {
+  def sumNumbersBw_tail(a: Int, b:Int): Int = {
     @tailrec
-    def concatTailrec(remainingTimes: Int, accumulator: String): String =
+    def sumTail(a: Int, b: Int, accumulator: Int) : Int = {
+      if(a > b) accumulator
+      else sumTail(a, b-1, accumulator + b)
+    }
+    sumTail(a, b, 0)
+  }
+
+  //concatenate a string n times
+  def concatN(s: String, n: Int) : String = {
+    if (n <= 0) ""
+    else s + concatN(s, n-1)
+  }
+
+  def concatN_Tail(s: String, n: Int): String = {
+    @tailrec
+    def concatTailRec(remainingTimes: Int, accumulator: String) : String = {
       if (remainingTimes <= 0) accumulator
-      else concatTailrec(remainingTimes - 1, string + accumulator)
-
-    concatTailrec(n, "")
+      else concatTailRec(remainingTimes - 1, accumulator + s)
+    }
+    concatTailRec(n, "")
   }
 
-  // 2
-  def fibonacci(n: Int): Int = {
-    def fiboTailrec(i: Int, last: Int, previous: Int): Int =
+  // tail recursive fibonacci function
+  def fibonacci(n: Int) : Int = {
+    @tailrec
+    def fib_tailRec(i: Int, last: Int, prev: Int) : Int = {
       if (i >= n) last
-      else fiboTailrec(i + 1, last + previous, last)
-
-    if (n <= 2) 1
-    else fiboTailrec(2, 1, 1)
-  }
-
-  // 3 - yes, rephrasing:
-  def isPrime(n: Int): Boolean = {
-    def isPrimeUntil(t: Int): Boolean =
-      if (t <= 1) true
-      else if (n % t == 0) false
-      else isPrimeUntil(t - 1)
-
-    isPrimeUntil(n / 2)
+      else fib_tailRec(i + 1, last + prev , last)
+    }
+    if( n <= 2) 1
+    fib_tailRec(2, 1, 1)
   }
 
   def main(args: Array[String]): Unit = {
-    println(sumUntil_v2(20000))
-    println(concatenate("Scala", 5))
-    println(fibonacci(7))
+    println(sumUntil(10))
+    println(sumUntil_v2(20000))// tail recursion doesnt use stack
+    // TAIL recursion: recursive call occurs last in the code path.
+
+    println(sumNumbersBetween(1, 10))
+    println(sumNumbersBw_tail(1, 10))
+    println(concatN("Uzbal", 4))
+    println(concatN_Tail("Ujwal", 4))
+    println(fibonacci(6))
   }
 }
