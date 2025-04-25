@@ -61,11 +61,3 @@ The tags are:
 * `4.2-all-the-patterns`
 * `4.3-pattern-matching-everywhere`
 * `4.4-braceless-syntax`
-
-
-### Contributions
-
-If you have changes to suggest to this repo, either
-- submit a GitHub issue
-- tell me in the course Q/A forum
-- submit a pull request!
